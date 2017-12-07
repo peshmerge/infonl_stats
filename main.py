@@ -22,7 +22,10 @@ def main():
     print("Flex sensor#2= ", corrected_times[1])
     print("Flex sensor#3= ", corrected_times[2])
     print(" The user has maintained the correct posture for ", correct_posture_duration)
-
+    """
+    @Todo should be done correctly after having real data.
+    """
+    print("The percentage of total time is : ",correct_posture_duration / data[1][-1][0])
 
 def get_time_of_maintaining_correct_posture(data_list, calibration_values):
     """
