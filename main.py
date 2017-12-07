@@ -3,50 +3,131 @@ import random as rand
 import csv
 
 
-# MessageType1 (start, after calibration) - calibrationFlexValue1 - calibrationFlexValue2 - calibrationFlexValue3 - pattern - endingByte
-# MessageType2 (every cycle)  - Total millis since start - FlexSensorValue1 - FlexSensorValue2 - FlexSensorValue3 - endingByte
+# MessageType1 (start, after calibration)
+#  - calibrationFlexValue1 - calibrationFlexValue2 - calibrationFlexValue3 - pattern - endingByte
+# MessageType2 (every cycle)  -
+# Total millis since start - FlexSensorValue1 - FlexSensorValue2 - FlexSensorValue3 - endingByte
 
-
-# How many times did the user have to be corrected?
-# How long did it take before the user corrected itself (average of values)?
+# How many times did the user has to be corrected?
+# How long did it take before the user corrected him/herself (average of values)?
 # How long did they maintain correct posture? (percentage of total time)
 
 def main():
     # writeFileFunc('data.txt')
     data = read_file_func('data.txt')
-    print(data[0])
+    corrected_times = get_correct_values(data[1], data[0])
+    correct_posture_duration = get_time_of_maintaining_correct_posture(data[1], data[0])
+    print("How many times the user has to be corrected per flex Sensor?")
+    print("Flex sensor#1= ", corrected_times[0])
+    print("Flex sensor#2= ", corrected_times[1])
+    print("Flex sensor#3= ", corrected_times[2])
+    print(" The user has maintained the correct posture for ", correct_posture_duration)
 
-    # This list contains all measurements of the flexSensors which are equal to or greater than the sensors values.
-    correctedList = get_correct_values(data[1], data[0])
 
-    # print(*correctedList, sep='\n')
-    print(len(correctedList))
-    # filtered = [x for x in set(data[1]) if x < C]
+def get_time_of_maintaining_correct_posture(data_list, calibration_values):
+    """
+    :param data_list
+    :param calibration_values
+    """
 
-# How many times did the user has to be corrected?
-# First we have to calculate how many correct values there are (values are > calibration value)
-def get_correct_values(data_list, calibration_values):
-    correctedList = []
+    # These are data_list_counter variables which will hold the frequency of how many times a user has been
+    # corrected withing
+    # a session
+    # These arrays holds logical values which work as helpers to calculate the frequency
+    correction_flex_sensor = [False, False]
+
+    correct_posture_duration = 0
+
+    time_list = [[]]
+
+    # Loop through the data list to be able to collect the needed data
+    time_list.pop()
+    data_list_counter = 1
     for item in data_list:
-        if item[1] >= calibration_values[1] and item[2] >= calibration_values[2] and item[1] >= calibration_values[3]:
-            correctedList.append(item)
-    return correctedList
+        if data_list_counter == len(data_list):
+            if correction_flex_sensor[0]:
+                time_list[-1] = [time_list[-1][0], item[0], item[0] - time_list[-1][0]]
+        else:
+            if item[1] >= calibration_values[0] and item[2] >= calibration_values[1] and item[3] >= calibration_values[
+                2]:
+                if correction_flex_sensor[0] == False:
+                    time_list.append([item[0], 0, 0])
+                correction_flex_sensor = [True, False]
+
+            else:
+                if correction_flex_sensor[0]:
+                    # correction_flex_sensor = [True, True]
+                    correction_flex_sensor = [False, False]
+                    time_list[-1] = [time_list[-1][0], item[0], item[0] - time_list[-1][0]]
+            data_list_counter += 1
+
+    # Calculate the time (duration of how long the user maintained a correct posture)
+    for item in time_list:
+        correct_posture_duration = correct_posture_duration + item[2]
+    return correct_posture_duration
+
+
+def get_correct_values(data_list, calibration_values):
+    """
+    How many times did the user has to be corrected?
+    :type data_list: object
+    :param data_list: a list of time in milliseconds and three flexSensors values
+    :param calibration_values: the calibration values which must be captured at the beginning.
+    """
+
+    # These are temp variables which will hold the frequency of how many times a user has been corrected withing
+    # a session
+    correction_frequency_1 = 0
+    correction_frequency_2 = 0
+    correction_frequency_3 = 0
+
+    # These arrays holds logical values which work as helpers to calculate the frequency
+    correction_flex_sensor_1 = [False, False]
+    correction_flex_sensor_2 = [False, False]
+    correction_flex_sensor_3 = [False, False]
+
+    # Loop through the data list to be able to collect the needed data
+    for item in data_list:
+        if item[1] >= calibration_values[0]:
+            correction_flex_sensor_1 = [True, False]
+        else:
+            if correction_flex_sensor_1[0]:
+                correction_flex_sensor_1 = [False, False]
+                correction_frequency_1 += 1
+
+        if item[2] >= calibration_values[1]:
+            correction_flex_sensor_2 = [True, False]
+        else:
+            if correction_flex_sensor_2[0]:
+                correction_flex_sensor_2 = [False, False]
+                correction_frequency_2 += 1
+
+        if item[3] >= calibration_values[2]:
+            correction_flex_sensor_3 = [True, False]
+        else:
+            if correction_flex_sensor_3[0]:
+                correction_flex_sensor_3 = [False, False]
+                correction_frequency_3 += 1
+
+        # correctedList.append(item)
+
+    return [correction_frequency_1, correction_frequency_2, correction_frequency_3]
 
 
 def read_file_func(file_name):
-    calibrationValues = []
-    sensorsValues = []
+    calibration_values = []
+    sensors_values = []
     data = []
     with open(file_name, encoding='utf8', buffering=1024) as inputFile:
         temp = False
         for line in csv.reader(inputFile, delimiter="\t"):
             if temp == False:
-                calibrationValues = line
+                calibration_values = [int(i) for i in line]
                 temp = True
             else:
-                sensorsValues.append(line)
-        data.append(calibrationValues)
-        data.append(sensorsValues)
+                sensors_values.append([int(i) for i in line])
+        data.append(calibration_values)
+        data.append(sensors_values)
     return data
 
 
