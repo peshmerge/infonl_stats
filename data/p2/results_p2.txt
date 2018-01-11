@@ -1,0 +1,182 @@
+User 1
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 66
+	Flex sensor#2= 90
+	Flex sensor#3= 42
+
+How long did it take before the user corrected him/herself (average of values)?
+	 19742.966
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0381
+
+ 
+
+User 2
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 32
+	Flex sensor#2= 22
+	Flex sensor#3= 21
+
+How long did it take before the user corrected him/herself (average of values)?
+	 12528.58
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0109
+
+ 
+
+User 3
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 47
+	Flex sensor#2= 43
+	Flex sensor#3= 60
+
+How long did it take before the user corrected him/herself (average of values)?
+	 18670.221
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0073
+
+ 
+
+User 4
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 20
+	Flex sensor#2= 6
+	Flex sensor#3= 20
+
+How long did it take before the user corrected him/herself (average of values)?
+	 11413.964
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.1197
+
+ 
+
+User 5
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 36
+	Flex sensor#2= 39
+	Flex sensor#3= 43
+
+How long did it take before the user corrected him/herself (average of values)?
+	 10696.924
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0512
+
+ 
+
+User 6
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 34
+	Flex sensor#2= 25
+	Flex sensor#3= 35
+
+How long did it take before the user corrected him/herself (average of values)?
+	 9643.929
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0106
+
+ 
+
+User 7
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 36
+	Flex sensor#2= 52
+	Flex sensor#3= 32
+
+How long did it take before the user corrected him/herself (average of values)?
+	 11574.91
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0236
+
+ 
+
+User 8
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 21
+	Flex sensor#2= 51
+	Flex sensor#3= 8
+
+How long did it take before the user corrected him/herself (average of values)?
+	 10565.991
+
+How long did they maintain correct posture? (percentage of total time)
+	 1.0
+
+ 
+
+User 9
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 19
+	Flex sensor#2= 0
+	Flex sensor#3= 21
+
+How long did it take before the user corrected him/herself (average of values)?
+	 11994.292
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.9687
+
+ 
+
+User 10
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 0
+	Flex sensor#2= 0
+	Flex sensor#3= 2
+
+How long did it take before the user corrected him/herself (average of values)?
+	 14021.903
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.4426
+
+ 
+
+User 11
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 2
+	Flex sensor#2= 1
+	Flex sensor#3= 0
+
+How long did it take before the user corrected him/herself (average of values)?
+	 4481.262
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0
+
+ 
+
+User 12
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 0
+	Flex sensor#2= 3
+	Flex sensor#3= 1
+
+How long did it take before the user corrected him/herself (average of values)?
+	 10146.875
+
+How long did they maintain correct posture? (percentage of total time)
+	 0.0371
+
+ 
+
+User 13
+How many times the user has to be corrected per flex Sensor?
+	Flex sensor#1= 0
+	Flex sensor#2= 0
+	Flex sensor#3= 0
+
+How long did it take before the user corrected him/herself (average of values)?
+	 9621.778
+
+How long did they maintain correct posture? (percentage of total time)
+	 1.0
+
+ 
+

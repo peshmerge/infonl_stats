@@ -11,27 +11,33 @@ import csv
 # How many times did the user has to be corrected?
 # How long did it take before the user corrected him/herself (average of values)?
 # How long did they maintain correct posture? (percentage of total time)
+from jsonschema._validators import pattern
+
+pattern1 = [-20, 20]
+pattern2 = [-35, 35]
+pattern3 = [-35, 35]
 
 def main():
     # writeFileFunc('data.txt')
-    data = read_file_func('data.txt')
-    corrected_times = get_correct_values(data[1], data[0])
-    correct_posture_duration = get_time_of_maintaining_correct_posture(data[1], data[0])
-    print("How many times the user has to be corrected per flex Sensor?")
-    print("Flex sensor#1= ", corrected_times[0])
-    print("Flex sensor#2= ", corrected_times[1])
-    print("Flex sensor#3= ", corrected_times[2])
 
-    print(" The user has maintained the correct posture for ", correct_posture_duration)
-    """
-    @Todo should be done correctly after having real data.
-    """
-    print("The percentage of total time is : ", correct_posture_duration / data[1][-1][0])
+    with open('data/p3/results_p3.txt', 'w') as out_file:
+        for i in range(1,14):
+            print("User",str(i), file=out_file, end='\n')
+            data = read_file_func("data/p3/USER_"+str(i)+"_PATTERN_3.csv")
+            corrected_times = get_correct_values(data[1], data[0])
+            correct_posture_duration = get_time_of_maintaining_correct_posture(data[1], data[0])
+            print("How many times the user has to be corrected per flex Sensor?", file=out_file, end='\n')
+            print("\tFlex sensor#1=", corrected_times[0], file=out_file, end='\n')
+            print("\tFlex sensor#2=", corrected_times[1], file=out_file, end='\n')
+            print("\tFlex sensor#3=", corrected_times[2], file=out_file, end='\n')
+            print("", file=out_file)
+            print("How long did it take before the user corrected him/herself (average of values)?", file=out_file, end='\n')
+            print("\t",get_time_before_correction(data[1], data[0]), file=out_file, end='\n')
+            print("", file=out_file)
+            print("How long did they maintain correct posture? (percentage of total time)", file=out_file, end='\n')
+            print("\t",round(correct_posture_duration, 4), file=out_file, end='\n')
 
-    print("Average time needed before the user corrected himself per flex sensor")
-    print(get_time_before_correction(data[1], data[0]))
-
-
+            print("\n \n", file=out_file, end='\n')
 # How long did it take before the user corrected him/herself (average of values)?
 def get_time_before_correction(data_list, calibration_values):
     started = True
@@ -55,7 +61,7 @@ def get_time_before_correction(data_list, calibration_values):
             if correction_flex_sensor_3[0]:
                 time_list_3[-1] = [time_list_3[-1][0], item[0], item[0] - time_list_3[-1][0]]
         else:
-            if item[1] < calibration_values[0]:
+            if item[1] > pattern2[0] or item[1] < pattern2[1]:
                 if correction_flex_sensor_1[0] == False:
                     time_list_1.append([item[0], 0, 0])
                     correction_flex_sensor_1 = [True, False]
@@ -65,7 +71,7 @@ def get_time_before_correction(data_list, calibration_values):
                     correction_flex_sensor_1 = [False, False]
                     time_list_1[-1] = [time_list_1[-1][0], item[0], item[0] - time_list_1[-1][0]]
 
-            if item[2] < calibration_values[1]:
+            if item[2] > pattern2[0] or item[2] < pattern2[1]:
                 if correction_flex_sensor_2[0] == False:
                     time_list_2.append([item[0], 0, 0])
                     correction_flex_sensor_2 = [True, False]
@@ -75,7 +81,7 @@ def get_time_before_correction(data_list, calibration_values):
                         correction_flex_sensor_2 = [False, False]
                         time_list_2[-1] = [time_list_2[-1][0], item[0], item[0] - time_list_2[-1][0]]
 
-            if item[3] < calibration_values[2]:
+            if item[3] > pattern2[0] or item[3] < pattern2[1]:
                 if correction_flex_sensor_3[0] == False:
                     time_list_3.append([item[0], 0, 0])
                     correction_flex_sensor_3 = [True, False]
@@ -98,11 +104,16 @@ def get_time_before_correction(data_list, calibration_values):
     for time_item in time_list_3:
         time_sum_3 += time_item[2]
 
-    return [
+
+    return_value=[
         time_sum_1 / len(time_list_1) if len(time_list_1) else 0,
         time_sum_2 / len(time_list_2) if len(time_list_2) else 0,
         time_sum_3 / len(time_list_3) if len(time_list_3) else 0
         ]
+
+
+    return round((return_value[0]+return_value[1]+return_value[2])/3,3)
+
 
 
 # How long did they maintain correct posture? (percentage of total time)
@@ -129,8 +140,9 @@ def get_time_of_maintaining_correct_posture(data_list, calibration_values):
             if correction_flex_sensor[0]:
                 time_list[-1] = [time_list[-1][0], item[0], item[0] - time_list[-1][0]]
         else:
-            if item[1] >= calibration_values[0] and item[2] >= calibration_values[1] and item[3] >= calibration_values[
-                2]:
+            # Check if it's incorrect posture
+            if (item[1] < pattern2[0] or item[1] > pattern2[1]) and (item[2] < pattern2[0] or item[2] > pattern2[1]) \
+                    and item[3] < pattern2[0] or item[3] > pattern2[1]:
                 if correction_flex_sensor[0] == False:
                     time_list.append([item[0], 0, 0])
                 correction_flex_sensor = [True, False]
@@ -145,9 +157,12 @@ def get_time_of_maintaining_correct_posture(data_list, calibration_values):
     # Calculate the time (duration of how long the user maintained a correct posture)
     for time_item in time_list:
         correct_posture_duration = correct_posture_duration + time_item[2]
-    return correct_posture_duration
+
+    total_time = data_list[-1][0]-data_list[0][0]
+    return correct_posture_duration /total_time
 
 
+# How many times did the user has to be corrected?
 def get_correct_values(data_list, calibration_values):
     """
     How many times did the user has to be corrected?
@@ -169,21 +184,21 @@ def get_correct_values(data_list, calibration_values):
 
     # Loop through the data list to be able to collect the needed data
     for item in data_list:
-        if item[1] >= calibration_values[0]:
+        if item[1] < pattern2[0] or item[1] > pattern2[1]:
             correction_flex_sensor_1 = [True, False]
         else:
             if correction_flex_sensor_1[0]:
                 correction_flex_sensor_1 = [False, False]
                 correction_frequency_1 += 1
 
-        if item[2] >= calibration_values[1]:
+        if item[2] < pattern2[0] or item[1] > pattern2[1]:
             correction_flex_sensor_2 = [True, False]
         else:
             if correction_flex_sensor_2[0]:
                 correction_flex_sensor_2 = [False, False]
                 correction_frequency_2 += 1
 
-        if item[3] >= calibration_values[2]:
+        if item[3] < pattern2[0] or item[1] > pattern2[1]:
             correction_flex_sensor_3 = [True, False]
         else:
             if correction_flex_sensor_3[0]:
@@ -201,7 +216,7 @@ def read_file_func(file_name):
     data = []
     with open(file_name, encoding='utf8', buffering=1024) as inputFile:
         temp = False
-        for line in csv.reader(inputFile, delimiter="\t"):
+        for line in csv.reader(inputFile, delimiter=","):
             if temp == False:
                 calibration_values = [int(i) for i in line]
                 temp = True
